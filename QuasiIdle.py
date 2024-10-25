@@ -1,4 +1,5 @@
-import subprocess 
+from SaveAsClass import SaveAsWindow
+import subprocess
 import os
 from SaveAsClass import  read_file_content
 from PyQt6.QtWidgets import (  
@@ -9,7 +10,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QPlainTextEdit  
 )  
-from PyQt6.QtGui import  QAction  
+from PyQt6.QtGui import  QAction, QColor  
       
 class MainWindow(QMainWindow):  
     def __init__(self):  
@@ -26,16 +27,25 @@ class MainWindow(QMainWindow):
         layout = QHBoxLayout()  
         central_widget.setLayout(layout)  
 
+        self.line_number = QTextEdit(self) 
+        self.line_number.setFixedSize(20, 800) 
+        self.line_number.setPlaceholderText("1\n2\n3\n4\n5")
+        self.line_number.setReadOnly(True)
+        layout.addWidget(self.line_number)
+
         self.code_edit = QTextEdit(self)  
         self.code_edit.setPlaceholderText("Write your Python code here...")
-       
-       
         layout.addWidget(self.code_edit)  
 
        
         self.output_edit = QTextEdit()  
         self.output_edit.setReadOnly(True)  
-        layout.addWidget(self.output_edit)  
+        layout.addWidget(self.output_edit) 
+
+        if "Error" in self.output_edit.toPlainText():
+             self.output_edit.selectAll()  
+             self.output_edit.setTextColor(QColor("red")) 
+             self.output_editt.setCurrentFont(self.output_edit.font()) 
 
         
         menu_bar = self.menuBar()  
@@ -50,6 +60,7 @@ class MainWindow(QMainWindow):
         exit_action.triggered.connect(self.close) 
         save_action.triggered.connect(self.save_file)
         saveAs_action.triggered.connect(self.saveAs_file)
+       # saveAs_action.triggered.connect(SaveAsWindow)
 
         file_menu.addAction(new_action)  
         file_menu.addAction(open_action)  
@@ -125,6 +136,7 @@ class MainWindow(QMainWindow):
          
        
     def saveAs_file(self):
+                       
         subprocess.getoutput(["python", "SaveAsClass.py"])
     
     def find_text(self):  
