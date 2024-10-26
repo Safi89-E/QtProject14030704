@@ -27,16 +27,19 @@ class MainWindow(QMainWindow):
         layout = QHBoxLayout()  
         central_widget.setLayout(layout)  
 
-        self.line_number = QTextEdit(self) 
-        self.line_number.setFixedSize(20, 800) 
-        self.line_number.setPlaceholderText("1\n2\n3\n4\n5")
-        self.line_number.setReadOnly(True)
-        layout.addWidget(self.line_number)
-
         self.code_edit = QTextEdit(self)  
         self.code_edit.setPlaceholderText("Write your Python code here...")
-        layout.addWidget(self.code_edit)  
+        line_count = self.code_edit.blockCount()
+        layout.addWidget(self.code_edit)
 
+        line_number = ""
+        for i in range(1,line_count+1):
+            line_number += "i\n"
+        self.line_number = QTextEdit(self) 
+        self.line_number.setFixedSize(20, 800) 
+        self.line_number.setPlaceholderText(line_number)
+        self.line_number.setReadOnly(True)
+        layout.addWidget(self.line_number)
        
         self.output_edit = QTextEdit()  
         self.output_edit.setReadOnly(True)  
